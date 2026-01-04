@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Happy Birthday 2027</title>
+    <!-- Peanuts-style font (no local hosting required) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com"
+      crossorigin="">
+    <link
+href="https://fonts.googleapis.com/css2?family=Patrick+Hand&amp;display=swap"
+      rel="stylesheet">
+    <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: #FFEB8A; /* softer yellow */
+      color: #000;
+      font-family: "Patrick Hand", "Comic Sans MS", "Arial Rounded MT Bold", sans-serif;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .birthday-message {
+      font-size: 2rem;
+      margin-top: 20px;
+    }
+
+    .hero-image {
+      width: 65%;
+      max-width: 480px;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      display: block;
+      margin: 20px auto;
+    }
+
+    /* Video */
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      background: #000;
+      margin: 20px auto;
+    }
+
+    .video-wrapper video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      font-size: 1.3rem;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .custom-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #555;
+    }
+
+    .progress-bar {
+      width: 100%;
+      max-width: 400px;
+      margin: 10px auto;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+  </head>
+  <body>
+    <div class="container"> <img
+        src="HappyBirthdayBannerPeanutsGangGrok.jpg" alt="Happy Birthday
+        Banner with Peanuts Gang" class="hero-image" loading="lazy">
+      <div class="video-wrapper"> <video id="birthdayVideo"
+          src="HappyBirthdaySnoopy.mp4" preload="metadata"
+          playsinline="" title="Happy Birthday Video"></video>
+        <div id="videoOverlay" class="video-overlay hidden"
+          role="button" aria-label="Tap to play video with sound"> &#9654; Tap
+          Here to Play </div>
+      </div>
+      <input id="progressBar" class="progress-bar" min="0" max="100"
+        value="0" aria-label="Video progress" type="range">
+      <div class="custom-controls"> <button id="playPauseBtn">Play</button>
+        <button id="muteBtn">Mute</button> <label for="volumeSlider">Volume</label>
+        <input id="volumeSlider" min="0" max="1" step="0.1" value="1"
+          type="range"> </div>
+      <p class="birthday-message"> Sending you warmest birthday wishes
+        on your special day!<br>
+        Yours,<br>
+        Eugene </p>
+    </div>
+    <script>
+    const video = document.getElementById("birthdayVideo");
+    const overlay = document.getElementById("videoOverlay");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const muteBtn = document.getElementById("muteBtn");
+    const volumeSlider = document.getElementById("volumeSlider");
+    const progressBar = document.getElementById("progressBar");
+
+    // Attempt autoplay WITH sound (will fail on many browsers)
+    document.addEventListener("DOMContentLoaded", () => {
+      const attempt = video.play();
+      if (attempt !== undefined) {
+        attempt.catch(() => overlay.classList.remove("hidden"));
+      }
+    });
+
+    // Overlay fallback
+    overlay.addEventListener("click", () => {
+      video.play();
+      overlay.classList.add("hidden");
+    });
+
+    playPauseBtn.addEventListener("click", () => {
+      video.paused ? video.play() : video.pause();
+    });
+
+    muteBtn.addEventListener("click", () => {
+      video.muted = !video.muted;
+      muteBtn.textContent = video.muted ? "Unmute" : "Mute";
+    });
+
+    volumeSlider.addEventListener("input", () => {
+      video.volume = volumeSlider.value;
+      if (video.volume > 0) video.muted = false;
+    });
+
+    video.addEventListener("timeupdate", () => {
+      if (video.duration) {
+        progressBar.value = (video.currentTime / video.duration) * 100;
+      }
+    });
+
+    progressBar.addEventListener("input", () => {
+      if (video.duration) {
+        video.currentTime = (progressBar.value / 100) * video.duration;
+      }
+    });
+
+    video.addEventListener("play", () => playPauseBtn.textContent = "Pause");
+    video.addEventListener("pause", () => playPauseBtn.textContent = "Play");
+    video.addEventListener("ended", () => playPauseBtn.textContent = "Play");
+  </script>
+  </body>
+</html>
